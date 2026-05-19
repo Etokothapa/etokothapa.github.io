@@ -3,413 +3,1371 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Etoko Thapa | Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Etoko Thapa — Finance & Investment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
+    :root {
+      --black: #06080c;
+      --off-black: #0c0f15;
+      --deep: #101420;
+      --gold: #c8a84b;
+      --gold-l: #e2c97e;
+      --gold-d: #7a6228;
+      --white: #f0ede6;
+      --muted: #888070;
+      --dim: #3a3628;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      font-size: 16px;
+      background: var(--black);
+      color: var(--white);
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: #0b1120;
-      color: #f8fafc;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
       overflow-x: hidden;
+      background: var(--black);
+      cursor: none;
     }
 
-    body::before {
-      content: "";
+    /* ── CUSTOM CURSOR ─────────────────────── */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s, width 0.25s, height 0.25s, background 0.25s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,168,75,0.5);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    }
+    body:has(a:hover) #cursor,
+    body:has(button:hover) #cursor { width: 20px; height: 20px; }
+
+    /* ── LOADER ────────────────────────────── */
+    #loader {
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(circle at top left, rgba(56,189,248,0.15), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(99,102,241,0.12), transparent 35%);
-      z-index: -1;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    header {
-      position: fixed;
-      width: 100%;
-      top: 0;
+      background: var(--black);
       z-index: 1000;
-      background: rgba(11,17,32,0.7);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    #loader-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 8rem);
+      letter-spacing: 0.1em;
+      color: var(--white);
+      overflow: hidden;
+      line-height: 1;
+    }
+    #loader-name span { display: inline-block; }
+    #loader-bar-wrap {
+      width: 220px;
+      height: 1px;
+      background: var(--dim);
+      overflow: hidden;
+    }
+    #loader-bar {
+      height: 100%;
+      background: var(--gold);
+      width: 0;
+    }
+    #loader-pct {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
+    /* ── NAV ───────────────────────────────── */
     nav {
-      max-width: 1200px;
-      margin: auto;
-      padding: 1.2rem 2rem;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      mix-blend-mode: difference;
     }
-
-    .logo {
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
     }
-
-    .logo span {
-      color: #38bdf8;
-    }
-
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem;
+      list-style: none;
     }
-
     .nav-links a {
-      color: #cbd5e1;
-      transition: 0.3s;
-      font-size: 0.95rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 0.5; }
+
+    /* ── HERO ──────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 3rem 4rem;
+      overflow: hidden;
+    }
+    #hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #0e1520 0%, #060810 40%, #12100a 100%);
+    }
+    /* Large chart-line accent behind hero */
+    #hero-chart-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+      opacity: 0;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 15vw, 14rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      display: block;
+      overflow: hidden;
+    }
+    .hero-title .line { display: block; overflow: hidden; }
+    .hero-title .word { display: inline-block; }
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .hero-sub {
+      font-family: 'Cormorant', serif;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic;
+      color: var(--muted);
+      max-width: 380px;
+      line-height: 1.6;
+      opacity: 0;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      opacity: 0;
+    }
+    .btn {
+      padding: 0.75rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.25s;
+      display: inline-block;
+    }
+    .btn-gold {
+      background: var(--gold);
+      color: var(--black);
+    }
+    .btn-gold:hover { background: var(--gold-l); transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid rgba(200,168,75,0.4);
+      color: var(--white);
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    /* Scrolling marquee behind hero name */
+    .marquee-wrap {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-track span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28vw;
+      color: rgba(200,168,75,0.03);
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+      padding-right: 0.1em;
+      line-height: 1;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
 
-    .nav-links a:hover {
-      color: #38bdf8;
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+    }
+    .scroll-hint span {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(var(--gold-d), transparent);
+      animation: scrollDown 2s ease-in-out infinite;
+    }
+    @keyframes scrollDown {
+      0%,100% { transform: scaleY(1); opacity: 0.5; }
+      50% { transform: scaleY(1.15); opacity: 1; }
     }
 
-    .hero {
-      min-height: 100vh;
+    /* ── HORIZONTAL SCROLL SECTION ─────────── */
+    #h-scroll-outer {
+      position: relative;
+    }
+    #h-scroll-pin {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #h-scroll-track {
+      display: flex;
+      align-items: stretch;
+      height: 100%;
+      will-change: transform;
+    }
+    .h-panel {
+      flex-shrink: 0;
+      width: 100vw;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      position: relative;
+      padding: 4rem 3rem;
     }
 
-    .hero-container {
-      max-width: 1200px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 4rem;
-      align-items: center;
+    /* Panel 1 — About */
+    .panel-about {
+      background: var(--off-black);
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      max-width: none;
     }
-
-    .hero-text h3 {
-      color: #38bdf8;
-      margin-bottom: 1rem;
-      font-weight: 500;
-    }
-
-    .hero-text h1 {
-      font-size: 4.5rem;
-      line-height: 1;
+    .panel-about .p-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
       margin-bottom: 1.5rem;
-      font-weight: 800;
     }
-
-    .hero-text p {
-      color: #94a3b8;
-      font-size: 1.1rem;
-      max-width: 550px;
+    .panel-about .p-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: 0.03em;
+      color: var(--white);
       margin-bottom: 2rem;
-      line-height: 1.8;
+      max-width: 800px;
+    }
+    .panel-about .p-title em {
+      color: var(--gold);
+      font-style: normal;
+    }
+    .panel-about .p-body {
+      font-family: 'Cormorant', serif;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 600px;
+    }
+    .panel-about .p-body strong { color: var(--white); font-weight: 400; }
+
+    /* Panel 2 — Stats */
+    .panel-stats {
+      background: var(--deep);
+      gap: 0;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      width: 100%;
+      height: 100%;
+    }
+    .stat-block {
+      padding: 3rem;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: background 0.3s;
+    }
+    .stat-block:hover { background: rgba(200,168,75,0.04); }
+    .stat-block:nth-child(2), .stat-block:nth-child(4) { border-right: none; }
+    .stat-block:nth-child(3), .stat-block:nth-child(4) { border-bottom: none; }
+    .stat-big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 8vw, 8rem);
+      line-height: 1;
+      color: var(--white);
+      letter-spacing: 0.02em;
+    }
+    .stat-big span { color: var(--gold); }
+    .stat-lbl {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.5rem;
     }
 
-    .buttons {
+    /* Panel 3 — CFA */
+    .panel-cfa {
+      background: var(--black);
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 4rem 6rem;
+    }
+    .cfa-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid rgba(200,168,75,0.3);
+      border-radius: 2px;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 2.5rem;
+    }
+    .cfa-badge::before {
+      content: '';
+      display: block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .cfa-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 2rem;
+      max-width: 700px;
+    }
+    .cfa-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      max-width: 560px;
+    }
+    .cfa-list li {
       display: flex;
       gap: 1rem;
-      flex-wrap: wrap;
+      font-size: 0.9rem;
+      color: var(--muted);
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .cfa-list li::before {
+      content: '→';
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 0.05em;
     }
 
-    .btn {
-      padding: 1rem 1.8rem;
-      border-radius: 14px;
-      font-weight: 600;
-      transition: 0.3s;
-      display: inline-block;
+    /* ── SKILLS FULL SCREEN ────────────────── */
+    #skills {
+      background: var(--off-black);
+      padding: 8rem 3rem;
     }
-
-    .primary-btn {
-      background: linear-gradient(135deg, #38bdf8, #6366f1);
-      color: white;
-      box-shadow: 0 10px 30px rgba(56,189,248,0.25);
-    }
-
-    .secondary-btn {
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #cbd5e1;
-      background: rgba(255,255,255,0.03);
-    }
-
-    .btn:hover {
-      transform: translateY(-4px);
-    }
-
-    .hero-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 28px;
-      padding: 2rem;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    }
-
-    .hero-card h2 {
-      margin-bottom: 1rem;
-      color: #38bdf8;
-    }
-
-    .stat {
+    .section-header {
       display: flex;
+      align-items: flex-end;
       justify-content: space-between;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      color: #cbd5e1;
-    }
-
-    section {
-      max-width: 1200px;
-      margin: auto;
-      padding: 6rem 2rem;
-    }
-
-    .section-title {
-      font-size: 2.5rem;
-      margin-bottom: 3rem;
-      text-align: center;
-    }
-
-    .section-title span {
-      color: #38bdf8;
-    }
-
-    .about {
-      text-align: center;
-    }
-
-    .about p {
-      max-width: 850px;
-      margin: auto;
-      color: #94a3b8;
-      font-size: 1.05rem;
-      line-height: 1.9;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      margin-bottom: 5rem;
+      flex-wrap: wrap;
       gap: 2rem;
     }
-
-    .card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 2rem;
-      transition: 0.3s;
-      backdrop-filter: blur(10px);
-    }
-
-    .card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(56,189,248,0.4);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
-    }
-
-    .card h3 {
+    .s-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
       margin-bottom: 1rem;
-      font-size: 1.2rem;
+    }
+    .s-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 0.95;
+      color: var(--white);
+      letter-spacing: 0.03em;
+    }
+    .s-title em { color: var(--gold); font-style: normal; }
+    .skills-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .skill-row {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      border-right: 1px solid rgba(255,255,255,0.07);
+      padding: 2.5rem 2rem;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .skill-row:nth-child(4n) { border-right: none; }
+    .skill-row::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 2px;
+      width: 0;
+      background: var(--gold);
+      transition: width 0.5s var(--ease-out, cubic-bezier(0.16,1,0.3,1));
+    }
+    .skill-row:hover { background: rgba(200,168,75,0.04); }
+    .skill-row:hover::after { width: 100%; }
+    .sk-num {
+      font-family: 'Cormorant', serif;
+      font-size: 0.78rem;
+      color: var(--dim);
+      margin-bottom: 1rem;
+    }
+    .sk-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .sk-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.6;
     }
 
-    .card p {
-      color: #94a3b8;
+    /* ── PROJECTS ──────────────────────────── */
+    #projects {
+      background: var(--black);
+      padding: 8rem 3rem;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-top: 5rem;
+    }
+    .proj-card {
+      background: var(--black);
+      padding: 2.5rem 2rem;
+      transition: background 0.3s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .proj-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-d), transparent);
+      transform: scaleX(0);
+      transition: transform 0.5s;
+    }
+    .proj-card:hover { background: rgba(200,168,75,0.04); }
+    .proj-card:hover::before { transform: scaleX(1); }
+    .proj-num {
+      font-family: 'Cormorant', serif;
+      font-size: 0.78rem;
+      color: var(--dim);
+      margin-bottom: 1.5rem;
+    }
+    .proj-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      line-height: 1.1;
+    }
+    .proj-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
       line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.5rem;
+    }
+    .proj-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+    .proj-tag {
+      padding: 0.2rem 0.6rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(200,168,75,0.25);
+      color: var(--gold);
+      border-radius: 1px;
+    }
+    .proj-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .proj-link:hover { color: var(--gold); }
+    .proj-link svg { width: 12px; height: 12px; }
+
+    /* ── TIMELINE ──────────────────────────── */
+    #journey {
+      background: var(--off-black);
+      padding: 8rem 3rem;
+    }
+    .timeline {
+      margin-top: 5rem;
+      position: relative;
+      padding-left: 3rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold-d) 8%, var(--gold-d) 88%, transparent);
+    }
+    .tl-item {
+      padding-bottom: 4rem;
+      position: relative;
+    }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot {
+      position: absolute;
+      left: -3rem;
+      top: 0.35rem;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-d);
+      background: var(--off-black);
+      transform: translateX(-3.5px);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .tl-item:hover .tl-dot {
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(200,168,75,0.4);
+    }
+    .tl-period {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .tl-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+    .tl-org {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.85rem;
+    }
+    .tl-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 640px;
     }
 
-    .contact {
+    /* ── QUOTE SECTION ─────────────────────── */
+    #quote-section {
+      background: var(--deep);
+      padding: 8rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
     }
-
-    .contact p {
-      color: #94a3b8;
-      margin-bottom: 2rem;
-      font-size: 1.05rem;
+    .big-quote {
+      font-family: 'Cormorant', serif;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--white);
+      max-width: 880px;
+      line-height: 1.5;
     }
+    .big-quote em { color: var(--gold); font-style: normal; }
 
+    /* ── CONTACT ───────────────────────────── */
+    #contact {
+      background: var(--black);
+      padding: 8rem 3rem;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 6rem;
+      margin-top: 5rem;
+      align-items: start;
+    }
+    .contact-left p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+    }
+    .c-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .c-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border: 1px solid rgba(255,255,255,0.06);
+      text-decoration: none;
+      transition: border-color 0.3s, background 0.3s, transform 0.25s;
+      color: var(--white);
+    }
+    .c-link:hover {
+      border-color: rgba(200,168,75,0.35);
+      background: rgba(200,168,75,0.05);
+      transform: translateX(5px);
+    }
+    .c-link-icon {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(200,168,75,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .c-link-icon svg { width: 14px; height: 14px; }
+    .c-link-meta { display: flex; flex-direction: column; }
+    .c-link-lbl { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .c-link-val { font-size: 0.85rem; color: var(--white); }
+
+    /* Form */
+    .cform { display: flex; flex-direction: column; gap: 1rem; }
+    .cform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fg { display: flex; flex-direction: column; gap: 0.4rem; }
+    .fg label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .fg input, .fg textarea {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 0.8rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--white);
+      outline: none;
+      border-radius: 1px;
+      transition: border-color 0.25s;
+      -webkit-appearance: none;
+    }
+    .fg input:focus, .fg textarea:focus {
+      border-color: rgba(200,168,75,0.5);
+    }
+    .fg textarea { min-height: 110px; resize: vertical; }
+    .fg input::placeholder, .fg textarea::placeholder { color: var(--dim); }
+    .form-btn {
+      padding: 0.9rem 2rem;
+      background: var(--gold);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      border-radius: 1px;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .form-btn:hover { background: var(--gold-l); transform: translateY(-2px); }
+
+    /* ── FOOTER ────────────────────────────── */
     footer {
       border-top: 1px solid rgba(255,255,255,0.06);
-      text-align: center;
-      padding: 2rem;
-      color: #64748b;
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
+    footer p {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    footer span { color: var(--gold); }
 
-    @media(max-width: 768px) {
-      .hero-text h1 {
-        font-size: 3rem;
-      }
-
-      .nav-links {
-        gap: 1rem;
-        font-size: 0.9rem;
-      }
-
-      .hero-container {
-        gap: 2rem;
-      }
+    /* ── RESPONSIVE ────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 0 1.5rem 4rem; }
+      .skills-list { grid-template-columns: repeat(2, 1fr); }
+      .skill-row:nth-child(4n) { border-right: 1px solid rgba(255,255,255,0.07); }
+      .skill-row:nth-child(2n) { border-right: none; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .cform-row { grid-template-columns: 1fr; }
+      .timeline { padding-left: 1.5rem; }
+      .tl-dot { left: -1.5rem; }
+      .panel-cfa { padding: 2rem; }
+      footer { padding: 1.5rem; }
+    }
+    @media (max-width: 600px) {
+      .skills-list { grid-template-columns: 1fr; }
+      .skill-row { border-right: none !important; }
+      #skills, #projects, #journey, #contact { padding: 5rem 1.5rem; }
+      #quote-section { padding: 5rem 1.5rem; }
+      .stat-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<header>
-  <nav>
-    <div class="logo">Etoko<span>.</span></div>
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
 
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </div>
+  <!-- LOADER -->
+  <div id="loader">
+    <div id="loader-name"><span id="ln-e">E</span><span id="ln-t">T</span></div>
+    <div id="loader-bar-wrap"><div id="loader-bar"></div></div>
+    <div id="loader-pct" id="lpct">0%</div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-logo">Etoko Thapa</div>
+    <ul class="nav-links">
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
   </nav>
-</header>
 
-<section class="hero">
-  <div class="hero-container">
+  <!-- ── HERO ──────────────────────────────── -->
+  <section id="hero">
+    <div id="hero-bg"></div>
 
-    <div class="hero-text">
-      <h3>WELCOME TO MY PORTFOLIO</h3>
+    <!-- Animated chart line -->
+    <svg id="hero-chart-svg" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline id="chart-line" fill="none" stroke="rgba(200,168,75,0.12)" stroke-width="1.5"
+        points="0,700 120,680 200,650 280,600 320,620 400,560 480,500 540,520 600,440 680,380 740,400 820,320 900,260 960,280 1040,200 1120,160 1200,180 1280,120 1360,80 1440,60"/>
+      <polyline id="chart-fill" fill="url(#chartGrad)" stroke="none"
+        points="0,700 120,680 200,650 280,600 320,620 400,560 480,500 540,520 600,440 680,380 740,400 820,320 900,260 960,280 1040,200 1120,160 1200,180 1280,120 1360,80 1440,60 1440,900 0,900"/>
+      <defs>
+        <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(200,168,75,0.06)"/>
+          <stop offset="100%" stop-color="rgba(200,168,75,0)"/>
+        </linearGradient>
+      </defs>
+    </svg>
 
-      <h1>Etoko<br>Thapa</h1>
-
-      <p>
-        CFA Candidate and aspiring Data Analyst passionate about finance, analytics, and modern technology. I enjoy solving problems, building projects, and continuously improving my technical skills.
-      </p>
-
-      <div class="buttons">
-        <a href="#projects" class="btn primary-btn">View Projects</a>
-        <a href="#contact" class="btn secondary-btn">Contact Me</a>
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span>THAPA</span><span>THAPA</span><span>THAPA</span><span>THAPA</span>
       </div>
     </div>
 
-    <div class="hero-card">
-      <h2>Profile Overview</h2>
-
-      <div class="stat">
-        <span>Focus</span>
-        <span>Finance & Analytics</span>
-      </div>
-
-      <div class="stat">
-        <span>Learning</span>
-        <span>SQL • Python • Excel</span>
-      </div>
-
-      <div class="stat">
-        <span>Current Goal</span>
-        <span>Build Real Projects</span>
-      </div>
-
-      <div class="stat">
-        <span>Based In</span>
-        <span>Nepal 🇳🇵</span>
+    <div class="hero-content">
+      <div class="hero-eyebrow" id="hero-eyebrow">BBA Finance · CFA Level 1 Candidate</div>
+      <h1 class="hero-title">
+        <span class="line"><span class="word" id="hw-etoko">Etoko</span></span>
+        <span class="line"><span class="word" id="hw-thapa">Thapa</span></span>
+      </h1>
+      <div class="hero-bottom">
+        <p class="hero-sub" id="hero-sub">
+          Investment analysis &amp; financial markets. Building analytical precision on the path to CFA certification.
+        </p>
+        <div class="hero-cta" id="hero-cta">
+          <a href="#projects" class="btn btn-gold">View Projects</a>
+          <a href="#contact" class="btn btn-outline">Get in Touch</a>
+        </div>
       </div>
     </div>
 
+    <div class="scroll-hint" id="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── HORIZONTAL SCROLL ──────────────────── -->
+  <div id="h-scroll-outer">
+    <div id="h-scroll-pin">
+      <div id="h-scroll-track">
+
+        <!-- Panel 1: About -->
+        <div class="h-panel panel-about">
+          <p class="p-eyebrow">About</p>
+          <h2 class="p-title">Finance. <em>Analysis.</em><br>Conviction.</h2>
+          <p class="p-body">
+            A <strong>BBA Finance graduate</strong> with deep curiosity for investment analysis, financial markets, and valuation. Currently pursuing the <strong>CFA Level 1</strong> designation — building the rigorous, ethical foundation expected of investment professionals worldwide.
+          </p>
+        </div>
+
+        <!-- Panel 2: Stats -->
+        <div class="h-panel panel-stats">
+          <div class="stat-grid">
+            <div class="stat-block">
+              <div class="stat-big">BBA<span>.</span></div>
+              <div class="stat-lbl">Finance Graduate</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-big">CFA<span>1</span></div>
+              <div class="stat-lbl">Level 1 Candidate</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-big">5<span>+</span></div>
+              <div class="stat-lbl">Finance Projects</div>
+            </div>
+            <div class="stat-block">
+              <div class="stat-big">∞<span></span></div>
+              <div class="stat-lbl">Learning Mindset</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: CFA Journey -->
+        <div class="h-panel panel-cfa">
+          <div class="cfa-badge">CFA Program — Active Candidate</div>
+          <h2 class="cfa-title">The CFA<br>Journey</h2>
+          <ul class="cfa-list">
+            <li>Equity Investments &amp; Security Analysis</li>
+            <li>Fixed Income &amp; Derivative Markets</li>
+            <li>Financial Statement Analysis (IFRS/GAAP)</li>
+            <li>Portfolio Management &amp; Wealth Planning</li>
+            <li>Ethical &amp; Professional Standards</li>
+            <li>Quantitative Methods &amp; Economics</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
   </div>
-</section>
 
-<section id="about" class="about">
-  <h2 class="section-title">About <span>Me</span></h2>
-
-  <p>
-    I am currently pursuing the CFA program while developing strong analytical and technical skills in data analytics and web development. My interests include financial analysis, data visualization, portfolio concepts, and modern digital technologies. I enjoy building clean, professional projects that combine both finance and technology.
-  </p>
-</section>
-
-<section id="skills">
-  <h2 class="section-title">My <span>Skills</span></h2>
-
-  <div class="grid">
-
-    <div class="card">
-      <h3>Financial Analysis</h3>
-      <p>
-        Understanding financial statements, valuation basics, portfolio concepts, and investment analysis through CFA studies.
-      </p>
+  <!-- ── SKILLS ─────────────────────────────── -->
+  <section id="skills">
+    <div class="section-header">
+      <div>
+        <div class="s-eyebrow">Core Competencies</div>
+        <h2 class="s-title">The <em>Toolkit</em></h2>
+      </div>
+      <p style="font-family:'Cormorant',serif;font-size:1.1rem;font-style:italic;color:var(--muted);max-width:360px;line-height:1.7;">Developed through academic rigour, self-directed learning, and hands-on project work.</p>
     </div>
-
-    <div class="card">
-      <h3>Data Analytics</h3>
-      <p>
-        Learning data cleaning, dashboards, visualization, and analytical thinking using modern tools.
-      </p>
+    <div class="skills-list">
+      <div class="skill-row">
+        <div class="sk-num">01</div>
+        <div class="sk-name">Financial Analysis</div>
+        <div class="sk-desc">Ratio analysis, trend identification, performance metrics</div>
+      </div>
+      <div class="skill-row">
+        <div class="sk-num">02</div>
+        <div class="sk-name">Financial Reporting</div>
+        <div class="sk-desc">Income statements, balance sheets, cash flow, IFRS/GAAP</div>
+      </div>
+      <div class="skill-row">
+        <div class="sk-num">03</div>
+        <div class="sk-name">Valuation</div>
+        <div class="sk-desc">DCF modelling, comparables, intrinsic value assessment</div>
+      </div>
+      <div class="skill-row">
+        <div class="sk-num">04</div>
+        <div class="sk-name">Portfolio Analysis</div>
+        <div class="sk-desc">Risk-return optimisation, asset allocation, attribution</div>
+      </div>
+      <div class="skill-row">
+        <div class="sk-num">05</div>
+        <div class="sk-name">Excel & Modelling</div>
+        <div class="sk-desc">Advanced spreadsheets, financial projections, dashboards</div>
+      </div>
+      <div class="skill-row">
+        <div class="sk-num">06</div>
+        <div class="sk-name">Data Analytics</div>
+        <div class="sk-desc">Quantitative data interpretation, statistical analysis</div>
+      </div>
+      <div class="skill-row">
+        <div class="sk-num">07</div>
+        <div class="sk-name">Investment Concepts</div>
+        <div class="sk-desc">Equities, fixed income, derivatives — CFA curriculum</div>
+      </div>
+      <div class="skill-row">
+        <div class="sk-num">08</div>
+        <div class="sk-name">Analytical Thinking</div>
+        <div class="sk-desc">Structured reasoning, evidence-based decision-making</div>
+      </div>
     </div>
+  </section>
 
-    <div class="card">
-      <h3>Excel & SQL</h3>
-      <p>
-        Spreadsheet modeling, formulas, pivot tables, and querying databases efficiently.
-      </p>
+  <!-- ── PROJECTS ───────────────────────────── -->
+  <section id="projects">
+    <div class="section-header">
+      <div>
+        <div class="s-eyebrow">Featured Work</div>
+        <h2 class="s-title">Projects &amp; <em>Case Studies</em></h2>
+      </div>
+      <a href="#contact" class="btn btn-outline" style="height:fit-content">All Work →</a>
     </div>
-
-    <div class="card">
-      <h3>Web Development</h3>
-      <p>
-        Creating responsive websites using HTML, CSS, and JavaScript with modern UI design.
-      </p>
+    <div class="projects-grid">
+      <div class="proj-card">
+        <div class="proj-num">01 / 05</div>
+        <h3 class="proj-title">Financial Portfolio Tracker</h3>
+        <p class="proj-desc">Excel-based portfolio tracker monitoring asset allocation, tracking returns, and calculating risk metrics including Sharpe ratio and beta across equity holdings.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Excel</span>
+          <span class="proj-tag">Portfolio</span>
+          <span class="proj-tag">Risk Metrics</span>
+        </div>
+        <a href="#" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="proj-card">
+        <div class="proj-num">02 / 05</div>
+        <h3 class="proj-title">Market Analysis Dashboard</h3>
+        <p class="proj-desc">Interactive dashboard analysing equity market trends, sector rotations, and macro indicators. Incorporates price momentum signals and valuation multiples.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Analytics</span>
+          <span class="proj-tag">Markets</span>
+          <span class="proj-tag">Macro</span>
+        </div>
+        <a href="#" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="proj-card">
+        <div class="proj-num">03 / 05</div>
+        <h3 class="proj-title">Valuation Case Study</h3>
+        <p class="proj-desc">Deep-dive intrinsic valuation using DCF, EV/EBITDA comparables, and DDM models. Includes sensitivity tables and a full investment thesis summary.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">DCF</span>
+          <span class="proj-tag">Comparables</span>
+          <span class="proj-tag">Thesis</span>
+        </div>
+        <a href="#" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Report
+        </a>
+      </div>
+      <div class="proj-card">
+        <div class="proj-num">04 / 05</div>
+        <h3 class="proj-title">CFA Study Notes</h3>
+        <p class="proj-desc">Structured notes across all CFA Level 1 topic areas — ethics, quant methods, economics, FSA, equity, fixed income, derivatives, and portfolio management.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">CFA</span>
+          <span class="proj-tag">Study</span>
+          <span class="proj-tag">Reference</span>
+        </div>
+        <a href="#" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="proj-card">
+        <div class="proj-num">05 / 05</div>
+        <h3 class="proj-title">Financial Data Analysis</h3>
+        <p class="proj-desc">Quantitative analysis examining cross-sectional returns and sector performance using statistical tools to derive actionable investment insights from market data.</p>
+        <div class="proj-tags">
+          <span class="proj-tag">Data</span>
+          <span class="proj-tag">Statistics</span>
+          <span class="proj-tag">Quant</span>
+        </div>
+        <a href="#" class="proj-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          GitHub
+        </a>
+      </div>
+      <div class="proj-card" style="background:rgba(200,168,75,0.04);border:1px solid rgba(200,168,75,0.15);display:flex;align-items:center;justify-content:center;text-align:center;min-height:220px;">
+        <div>
+          <p style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.75rem;">More Coming Soon</p>
+          <p style="font-size:0.78rem;color:var(--dim);">Currently building new projects</p>
+        </div>
+      </div>
     </div>
+  </section>
 
-  </div>
-</section>
+  <!-- ── QUOTE ──────────────────────────────── -->
+  <section id="quote-section">
+    <blockquote class="big-quote" id="big-quote">
+      "It doesn't matter where you start — it's how you <em>progress</em> from there."
+    </blockquote>
+  </section>
 
-<section id="projects">
-  <h2 class="section-title">Featured <span>Projects</span></h2>
-
-  <div class="grid">
-
-    <div class="card">
-      <h3>Portfolio Website</h3>
-      <p>
-        A responsive and modern personal portfolio website hosted using GitHub Pages.
-      </p>
+  <!-- ── JOURNEY ────────────────────────────── -->
+  <section id="journey">
+    <div class="section-header">
+      <div>
+        <div class="s-eyebrow">Learning Journey</div>
+        <h2 class="s-title">Experience &amp; <em>Milestones</em></h2>
+      </div>
     </div>
+    <div class="timeline">
 
-    <div class="card">
-      <h3>Analytics Dashboard</h3>
-      <p>
-        Dashboard projects and visual reports built during analytics practice and learning.
-      </p>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Present — Ongoing</div>
+        <h3 class="tl-title">CFA Level 1 Candidate</h3>
+        <div class="tl-org">CFA Institute — Self-directed Preparation</div>
+        <p class="tl-body">Rigorously preparing across all 10 topic areas of the CFA curriculum. Building mastery in ethical standards, quantitative methods, economics, FSA, equity investments, fixed income, and derivatives. Developing the analytical and ethical framework expected of global investment professionals.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Academic Foundation</div>
+        <h3 class="tl-title">BBA in Finance</h3>
+        <div class="tl-org">Bachelor of Business Administration — Finance Major</div>
+        <p class="tl-body">Comprehensive undergraduate programme covering corporate finance, investment theory, financial markets, managerial accounting, and business strategy. Developed analytical skills through case studies, financial modelling, and applied research bridging theory with practical market realities.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Skill Development</div>
+        <h3 class="tl-title">Analytics & Technical Skills</h3>
+        <div class="tl-org">Self-directed Learning — Projects & Courses</div>
+        <p class="tl-body">Expanding technical skillset through data analytics, financial modelling, and investment research. Completed portfolio construction, equity valuation, and market analysis projects — applying academic knowledge to real-world financial datasets and scenarios.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">Looking Forward</div>
+        <h3 class="tl-title">Career Aspirations</h3>
+        <div class="tl-org">Investment Analysis · Equity Research · Portfolio Management</div>
+        <p class="tl-body">Aspiring to contribute to investment management, equity research, or financial analysis professionally. Seeking opportunities to apply analytical capabilities within teams that value intellectual precision, curiosity, and ethical practice. Path: CFA Charterholder.</p>
+      </div>
+
     </div>
+  </section>
 
-    <div class="card">
-      <h3>Finance Study Notes</h3>
-      <p>
-        Structured CFA learning notes and financial summaries for revision and practice.
-      </p>
+  <!-- ── CONTACT ────────────────────────────── -->
+  <section id="contact">
+    <div class="section-header">
+      <div>
+        <div class="s-eyebrow">Get in Touch</div>
+        <h2 class="s-title">Let's <em>Connect</em></h2>
+      </div>
     </div>
+    <div class="contact-grid">
+      <div class="contact-left">
+        <p>Open to internship opportunities, collaborative projects, mentorship, and professional networking. Whether you're a recruiter, fellow finance professional, or prospective collaborator — reach out.</p>
+        <div class="c-links">
+          <a href="mailto:etoko@email.com" class="c-link">
+            <div class="c-link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div class="c-link-meta">
+              <span class="c-link-lbl">Email</span>
+              <span class="c-link-val">etoko@email.com</span>
+            </div>
+          </a>
+          <a href="https://linkedin.com/in/etokothapa" target="_blank" rel="noopener" class="c-link">
+            <div class="c-link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div class="c-link-meta">
+              <span class="c-link-lbl">LinkedIn</span>
+              <span class="c-link-val">linkedin.com/in/etokothapa</span>
+            </div>
+          </a>
+          <a href="https://github.com/etokothapa" target="_blank" rel="noopener" class="c-link">
+            <div class="c-link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            </div>
+            <div class="c-link-meta">
+              <span class="c-link-lbl">GitHub</span>
+              <span class="c-link-val">github.com/etokothapa</span>
+            </div>
+          </a>
+        </div>
+      </div>
 
-  </div>
-</section>
+      <form class="cform" id="contactForm" novalidate>
+        <div class="cform-row">
+          <div class="fg">
+            <label>First Name</label>
+            <input type="text" placeholder="Jane" />
+          </div>
+          <div class="fg">
+            <label>Last Name</label>
+            <input type="text" placeholder="Smith" />
+          </div>
+        </div>
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" placeholder="jane@example.com" />
+        </div>
+        <div class="fg">
+          <label>Subject</label>
+          <input type="text" placeholder="Internship / Collaboration / Networking" />
+        </div>
+        <div class="fg">
+          <label>Message</label>
+          <textarea placeholder="Tell me about the opportunity or topic you'd like to discuss..."></textarea>
+        </div>
+        <button type="submit" class="form-btn" id="formBtn">Send Message →</button>
+      </form>
+    </div>
+  </section>
 
-<section id="contact" class="contact">
-  <h2 class="section-title">Get In <span>Touch</span></h2>
+  <!-- FOOTER -->
+  <footer>
+    <p>Crafted by <span>Etoko Thapa</span> — BBA Finance · CFA Candidate</p>
+    <p><span>© 2025</span> · Kathmandu, Nepal</p>
+  </footer>
 
-  <p>
-    Interested in collaborating, networking, or discussing finance and analytics? Feel free to reach out.
-  </p>
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <a href="mailto:your@email.com" class="btn primary-btn">Send Email</a>
-</section>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
 
-<footer>
-  © 2026 Etoko Thapa • Portfolio Website
-</footer>
+    /* ── CURSOR ────────────────────────────── */
+    const cur = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      cur.style.left = mx + 'px';
+      cur.style.top  = my + 'px';
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animCursor);
+    }
+    animCursor();
 
+    /* ── LOADER ────────────────────────────── */
+    const loaderBar = document.getElementById('loader-bar');
+    const loaderPct = document.getElementById('loader-pct');
+    const loader    = document.getElementById('loader');
+    let pct = 0;
+    const iv = setInterval(() => {
+      pct += Math.random() * 18;
+      if (pct >= 100) { pct = 100; clearInterval(iv); }
+      loaderBar.style.width = pct + '%';
+      loaderPct.textContent = Math.floor(pct) + '%';
+      if (pct === 100) setTimeout(startSite, 320);
+    }, 90);
+
+    function startSite() {
+      const tl = gsap.timeline();
+      tl.to('#loader-bar-wrap, #loader-pct', { opacity: 0, duration: 0.3 })
+        .to('#loader-name', { y: -60, opacity: 0, duration: 0.5, ease: 'power2.in' }, '-=0.1')
+        .to(loader, { opacity: 0, duration: 0.4, ease: 'power1.in' }, '-=0.1')
+        .set(loader, { display: 'none' })
+        .call(initAnimations);
+    }
+
+    function initAnimations() {
+      /* ── HERO REVEAL ───── */
+      const heroTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      heroTL
+        .to('#hero-chart-svg', { opacity: 1, duration: 1.5 })
+        .from('#hw-etoko', { y: '100%', duration: 1, ease: 'expo.out' }, 0.1)
+        .from('#hw-thapa', { y: '100%', duration: 1, ease: 'expo.out' }, 0.25)
+        .to('#hero-eyebrow', { opacity: 1, y: 0, duration: 0.8 }, 0.6)
+        .to('#hero-sub',     { opacity: 1, y: 0, duration: 0.8 }, 0.75)
+        .to('#hero-cta',     { opacity: 1, y: 0, duration: 0.8 }, 0.9)
+        .to('#scroll-hint',  { opacity: 1, duration: 0.8 }, 1.1);
+
+      /* Chart line draw */
+      const line = document.getElementById('chart-line');
+      const len = line.getTotalLength ? line.getTotalLength() : 2200;
+      gsap.set(line, { strokeDasharray: len, strokeDashoffset: len });
+      gsap.to(line, { strokeDashoffset: 0, duration: 3, delay: 0.5, ease: 'power2.out' });
+
+      /* ── HORIZONTAL SCROLL ─ */
+      const track = document.getElementById('h-scroll-track');
+      const panels = document.querySelectorAll('.h-panel');
+      const totalWidth = panels.length * window.innerWidth;
+
+      gsap.to(track, {
+        x: -(totalWidth - window.innerWidth),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#h-scroll-pin',
+          start: 'top top',
+          end: () => '+=' + (totalWidth - window.innerWidth),
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+        }
+      });
+
+      /* ── SCROLL REVEALS ─── */
+      gsap.utils.toArray('.tl-item').forEach((item, i) => {
+        gsap.from(item, {
+          opacity: 0, x: -40,
+          scrollTrigger: { trigger: item, start: 'top 85%', toggleActions: 'play none none reverse' },
+          delay: i * 0.08, duration: 0.8, ease: 'power2.out'
+        });
+      });
+
+      gsap.utils.toArray('.skill-row').forEach((row, i) => {
+        gsap.from(row, {
+          opacity: 0, y: 30,
+          scrollTrigger: { trigger: row, start: 'top 92%', toggleActions: 'play none none reverse' },
+          delay: (i % 4) * 0.08, duration: 0.6, ease: 'power2.out'
+        });
+      });
+
+      gsap.utils.toArray('.proj-card').forEach((card, i) => {
+        gsap.from(card, {
+          opacity: 0, y: 40,
+          scrollTrigger: { trigger: card, start: 'top 88%', toggleActions: 'play none none reverse' },
+          delay: (i % 3) * 0.1, duration: 0.7, ease: 'power2.out'
+        });
+      });
+
+      /* Quote split reveal */
+      const quote = document.getElementById('big-quote');
+      gsap.from(quote, {
+        opacity: 0, y: 50, scale: 0.97,
+        scrollTrigger: { trigger: quote, start: 'top 75%' },
+        duration: 1.2, ease: 'power3.out'
+      });
+
+      /* Section headers */
+      gsap.utils.toArray('.section-header').forEach(el => {
+        gsap.from(el, {
+          opacity: 0, y: 30,
+          scrollTrigger: { trigger: el, start: 'top 85%' },
+          duration: 0.9, ease: 'power2.out'
+        });
+      });
+
+      /* ── NAV scroll style ─ */
+      ScrollTrigger.create({
+        start: 'top -80',
+        onUpdate: (self) => {
+          document.getElementById('navbar').style.mixBlendMode = self.progress > 0 ? 'normal' : 'difference';
+        }
+      });
+    }
+
+    /* ── FORM SUBMIT ───────────────────────── */
+    document.getElementById('contactForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = document.getElementById('formBtn');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = 'Sent ✓';
+        btn.style.background = '#2a6a2a';
+        setTimeout(() => {
+          btn.textContent = 'Send Message →';
+          btn.style.background = '';
+          btn.disabled = false;
+          document.getElementById('contactForm').reset();
+        }, 3500);
+      }, 1600);
+    });
+
+    /* ── SMOOTH SCROLL ─────────────────────── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
